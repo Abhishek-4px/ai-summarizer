@@ -3,10 +3,9 @@ from pathlib import Path
 
 from dotenv import load_dotenv
 
-# Load .env BEFORE any module that reads OPENAI_API_KEY
 load_dotenv()
 
-from fastapi import FastAPI  # noqa: E402
+from fastapi import FastAPI 
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import HTMLResponse
 
@@ -14,10 +13,8 @@ from app.routes import router
 
 app = FastAPI(title="AI Text Summarizer")
 
-# --- Register API routes ---
 app.include_router(router)
 
-# --- Serve frontend ---
 FRONTEND_DIR = Path(__file__).resolve().parent.parent / "frontend"
 
 
