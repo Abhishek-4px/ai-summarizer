@@ -9,7 +9,7 @@ router = APIRouter()
 
 @router.post("/summarize", response_model=SummaryResponse)
 async def summarize(request: SummarizeRequest):
-    # --- validation ---
+   
     if not request.text or not request.text.strip():
         raise HTTPException(status_code=400, detail={"error": "Text cannot be empty."})
 
@@ -19,7 +19,7 @@ async def summarize(request: SummarizeRequest):
             detail={"error": "Text exceeds the 5000-character limit."},
         )
 
-    # --- call Gemini ---
+    
     try:
         result = summarize_text(request.text)
         return result
