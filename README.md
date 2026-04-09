@@ -1,13 +1,3 @@
----
-title: AI Summarizer
-emoji: 📝
-colorFrom: indigo
-colorTo: purple
-sdk: docker
-pinned: false
-short_description: AI Text Summarizer with structured output using Gemini API
----
-
 # AI Text Summarizer
 
 A FastAPI-powered text summarizer using Google Gemini API with structured JSON output.
