@@ -7,7 +7,6 @@ from google.genai import types
 
 from app.schemas import SummaryResponse
 
-# Lazy client init — HF Spaces injects secrets at container runtime
 _client = None
 
 MODEL_ID = "gemini-2.5-flash-lite"
