@@ -4,85 +4,90 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>AI Text Summarizer</title>
-  <meta name="description" content="Summarize any text instantly using AI. Get concise summaries and key points powered by OpenAI." />
+  <meta name="description" content="Summarize any text instantly using AI. Get concise summaries and key points." />
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     body {
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
-      background: #0f1117;
-      color: #e4e4e7;
+      font-family: Georgia, 'Times New Roman', serif;
+      background: #F5F0E1;
+      color: #2C2420;
       min-height: 100vh;
       display: flex;
       flex-direction: column;
       align-items: center;
-      padding: 2rem 1rem;
+      padding: 3rem 1rem 2rem;
     }
 
     h1 {
       font-size: 2rem;
       font-weight: 700;
-      background: linear-gradient(135deg, #6366f1, #a78bfa);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
+      color: #5C4033;
       margin-bottom: 0.25rem;
+      letter-spacing: -0.01em;
     }
 
     .subtitle {
-      color: #71717a;
+      color: #8A7E76;
       font-size: 0.95rem;
-      margin-bottom: 2rem;
+      margin-bottom: 2.5rem;
+      font-style: italic;
     }
 
     .card {
-      background: #1a1b23;
-      border: 1px solid #27272a;
-      border-radius: 16px;
+      background: #FFFDF7;
+      border: 1px solid #E2D9C8;
+      border-radius: 8px;
       padding: 1.75rem;
       width: 100%;
       max-width: 680px;
-      box-shadow: 0 4px 24px rgba(0, 0, 0, 0.4);
+      box-shadow: 0 1px 4px rgba(44, 36, 32, 0.06);
       margin-bottom: 1.5rem;
     }
 
     label {
       display: block;
-      font-weight: 600;
+      font-weight: 700;
       margin-bottom: 0.5rem;
-      font-size: 0.9rem;
-      color: #a1a1aa;
+      font-size: 0.85rem;
+      color: #5C4033;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
     }
 
     textarea {
       width: 100%;
       height: 180px;
-      background: #0f1117;
-      border: 1px solid #3f3f46;
-      border-radius: 10px;
-      color: #e4e4e7;
+      background: #FFFDF7;
+      border: 1px solid #E2D9C8;
+      border-radius: 6px;
+      color: #2C2420;
       padding: 1rem;
       font-size: 0.95rem;
-      font-family: inherit;
+      font-family: 'Courier New', Courier, monospace;
       resize: vertical;
-      transition: border-color 0.2s;
+      transition: border-color 0.2s, box-shadow 0.2s;
+      line-height: 1.6;
     }
+
+    textarea::placeholder { color: #B8ADA3; }
 
     textarea:focus {
       outline: none;
-      border-color: #6366f1;
-      box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15);
+      border-color: #8B5E3C;
+      box-shadow: 0 0 0 2px rgba(139, 94, 60, 0.12);
     }
 
     .counter {
       text-align: right;
-      font-size: 0.8rem;
-      color: #71717a;
+      font-size: 0.78rem;
+      color: #8A7E76;
       margin-top: 0.4rem;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
       transition: color 0.2s;
     }
 
-    .counter.limit { color: #ef4444; font-weight: 600; }
+    .counter.limit { color: #9B2C2C; font-weight: 600; }
 
     button {
       display: inline-flex;
@@ -91,58 +96,57 @@
       gap: 0.5rem;
       padding: 0.75rem 1.75rem;
       border: none;
-      border-radius: 10px;
+      border-radius: 6px;
       font-size: 0.95rem;
       font-weight: 600;
       cursor: pointer;
       transition: background 0.2s, opacity 0.2s, transform 0.1s;
-      font-family: inherit;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
     }
 
     button:active { transform: scale(0.97); }
 
     #summarize-btn {
-      background: linear-gradient(135deg, #6366f1, #818cf8);
-      color: #fff;
+      background: #5C4033;
+      color: #F5F0E1;
       margin-top: 1rem;
       width: 100%;
     }
 
-    #summarize-btn:hover:not(:disabled) { background: linear-gradient(135deg, #4f46e5, #6366f1); }
-    #summarize-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+    #summarize-btn:hover:not(:disabled) { background: #8B5E3C; }
+    #summarize-btn:disabled { opacity: 0.45; cursor: not-allowed; }
 
-    
     .spinner {
       display: none;
-      width: 20px;
-      height: 20px;
-      border: 3px solid rgba(255, 255, 255, 0.3);
-      border-top-color: #fff;
+      width: 18px;
+      height: 18px;
+      border: 2px solid rgba(245, 240, 225, 0.3);
+      border-top-color: #F5F0E1;
       border-radius: 50%;
       animation: spin 0.6s linear infinite;
     }
 
     @keyframes spin { to { transform: rotate(360deg); } }
-
     .spinner.active { display: inline-block; }
 
-    /* results */
     #results { display: none; }
     #results.visible { display: block; }
 
     .result-label {
-      font-size: 0.8rem;
-      font-weight: 600;
+      font-size: 0.78rem;
+      font-weight: 700;
       text-transform: uppercase;
-      letter-spacing: 0.05em;
-      color: #6366f1;
+      letter-spacing: 0.06em;
+      color: #8B5E3C;
       margin-bottom: 0.5rem;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
     }
 
     .summary-text {
-      line-height: 1.7;
-      color: #d4d4d8;
+      line-height: 1.8;
+      color: #3D322A;
       margin-bottom: 1.5rem;
+      font-size: 1.02rem;
     }
 
     .key-points { list-style: none; margin-bottom: 1.5rem; }
@@ -150,9 +154,9 @@
     .key-points li {
       position: relative;
       padding-left: 1.25rem;
-      margin-bottom: 0.5rem;
-      line-height: 1.5;
-      color: #d4d4d8;
+      margin-bottom: 0.6rem;
+      line-height: 1.6;
+      color: #3D322A;
     }
 
     .key-points li::before {
@@ -160,44 +164,46 @@
       position: absolute;
       left: 0;
       top: 0.55em;
-      width: 7px;
-      height: 7px;
-      background: #6366f1;
+      width: 6px;
+      height: 6px;
+      background: #8B5E3C;
       border-radius: 50%;
     }
 
     .badge {
       display: inline-block;
-      background: rgba(99, 102, 241, 0.15);
-      color: #818cf8;
+      background: #EDE6D6;
+      color: #5C4033;
       font-size: 0.8rem;
       font-weight: 600;
-      padding: 0.3rem 0.85rem;
+      padding: 0.3rem 0.9rem;
       border-radius: 999px;
       margin-bottom: 1.25rem;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
     }
 
     #copy-btn {
-      background: #27272a;
-      color: #a1a1aa;
-      font-size: 0.85rem;
+      background: transparent;
+      color: #8B5E3C;
+      border: 1px solid #E2D9C8;
+      font-size: 0.82rem;
       padding: 0.55rem 1.25rem;
     }
 
-    #copy-btn:hover { background: #3f3f46; color: #e4e4e7; }
+    #copy-btn:hover { background: #EDE6D6; color: #5C4033; }
 
-    
     #error-box {
       display: none;
-      background: rgba(239, 68, 68, 0.1);
-      border: 1px solid #ef4444;
-      border-radius: 10px;
+      background: #FDF2F2;
+      border: 1px solid #E8B4B8;
+      border-radius: 6px;
       padding: 1rem 1.25rem;
-      color: #fca5a5;
+      color: #9B2C2C;
       font-size: 0.9rem;
       margin-bottom: 1.5rem;
       max-width: 680px;
       width: 100%;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
     }
 
     #error-box.visible { display: block; }
@@ -205,8 +211,9 @@
     footer {
       margin-top: auto;
       padding-top: 2rem;
-      color: #52525b;
-      font-size: 0.8rem;
+      color: #B8ADA3;
+      font-size: 0.78rem;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
     }
   </style>
 </head>
@@ -241,7 +248,7 @@
     <button id="copy-btn" type="button">Copy JSON</button>
   </div>
 
-  <footer>&copy; 2026 AI Text Summarizer</footer>
+  <footer>&copy; 2025 AI Text Summarizer</footer>
 
   <script>
     const textarea     = document.getElementById("input-text");
@@ -258,19 +265,16 @@
 
     let lastResponse = null;
 
-   
     textarea.addEventListener("input", () => {
       const len = textarea.value.length;
       charCounter.textContent = `${len} / 5000`;
       charCounter.classList.toggle("limit", len >= 5000);
     });
 
-  
     summarizeBtn.addEventListener("click", async () => {
       const text = textarea.value.trim();
       if (!text) return;
 
-      
       errorBox.classList.remove("visible");
       resultsCard.classList.remove("visible");
       summarizeBtn.disabled = true;
@@ -293,7 +297,6 @@
 
         lastResponse = data;
 
-
         summaryText.textContent = data.summary;
 
         keyPointsUl.innerHTML = "";
@@ -315,7 +318,6 @@
       }
     });
 
-    
     copyBtn.addEventListener("click", () => {
       if (!lastResponse) return;
       navigator.clipboard.writeText(JSON.stringify(lastResponse, null, 2)).then(() => {
