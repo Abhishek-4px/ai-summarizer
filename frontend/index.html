@@ -111,7 +111,7 @@
     #summarize-btn:hover:not(:disabled) { background: linear-gradient(135deg, #4f46e5, #6366f1); }
     #summarize-btn:disabled { opacity: 0.5; cursor: not-allowed; }
 
-    /* spinner */
+    
     .spinner {
       display: none;
       width: 20px;
@@ -186,7 +186,7 @@
 
     #copy-btn:hover { background: #3f3f46; color: #e4e4e7; }
 
-    /* error */
+    
     #error-box {
       display: none;
       background: rgba(239, 68, 68, 0.1);
@@ -258,19 +258,19 @@
 
     let lastResponse = null;
 
-    // --- character counter ---
+   
     textarea.addEventListener("input", () => {
       const len = textarea.value.length;
       charCounter.textContent = `${len} / 5000`;
       charCounter.classList.toggle("limit", len >= 5000);
     });
 
-    // --- summarize ---
+  
     summarizeBtn.addEventListener("click", async () => {
       const text = textarea.value.trim();
       if (!text) return;
 
-      // reset UI
+      
       errorBox.classList.remove("visible");
       resultsCard.classList.remove("visible");
       summarizeBtn.disabled = true;
@@ -293,7 +293,7 @@
 
         lastResponse = data;
 
-        // populate results
+
         summaryText.textContent = data.summary;
 
         keyPointsUl.innerHTML = "";
@@ -315,7 +315,7 @@
       }
     });
 
-    // --- copy JSON ---
+    
     copyBtn.addEventListener("click", () => {
       if (!lastResponse) return;
       navigator.clipboard.writeText(JSON.stringify(lastResponse, null, 2)).then(() => {
